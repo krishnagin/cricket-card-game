@@ -1,0 +1,133 @@
+
+JAVA_HOME="C:\Program Files\Java\jdk-17"
+cd C:\Data\projects\cricket-extraction\app; ..\gradlew.bat --configure-on-demand -PrunClassName=org.example.app.App -s -PrunJvmArgs=-Dfile.encoding=UTF-8 -x check run
+Configuration on demand is an incubating feature.
+> Task :buildSrc:extractPluginRequests UP-TO-DATE
+> Task :buildSrc:generatePluginAdapters UP-TO-DATE
+> Task :buildSrc:compileJava UP-TO-DATE
+> Task :buildSrc:compileGroovy NO-SOURCE
+> Task :buildSrc:compileGroovyPlugins UP-TO-DATE
+> Task :buildSrc:pluginDescriptors UP-TO-DATE
+> Task :buildSrc:processResources UP-TO-DATE
+> Task :buildSrc:classes UP-TO-DATE
+> Task :buildSrc:jar UP-TO-DATE
+> Task :list:compileJava UP-TO-DATE
+> Task :utilities:compileJava UP-TO-DATE
+
+> Task :app:compileJava
+Note: C:\Data\projects\cricket-extraction\app\src\main\java\org\example\app\App.java uses unchecked or unsafe operations.
+Note: Recompile with -Xlint:unchecked for details.
+
+> Task :app:processResources NO-SOURCE
+> Task :app:classes
+> Task :list:processResources NO-SOURCE
+> Task :list:classes UP-TO-DATE
+> Task :list:jar UP-TO-DATE
+> Task :utilities:processResources NO-SOURCE
+> Task :utilities:classes UP-TO-DATE
+> Task :utilities:jar UP-TO-DATE
+
+> Task :app:run
+{Imran Tahir=acee4cc4, AL Phehlukwayo=ab6b1c45, AT Carey=69d03465, AK Markram=6a26221c, RSA Palliyaguruge=4339c19d, HDPK Dharmasena=323e4c16, JP Behrendorff=4933f499, RS Madugalle=766b5798, F du Plessis=3355b542, D Pretorius=11614d87, SPD Smith=30a45b23, Q de Kock=372455c4, MP Stoinis=d9273ee7, S Ravi=9b9ee0df, JP Duminy=2e8994e7, Aleem Dar=f02778d1, PJ Cummins=ded9240e, T Shamsi=a03bba42, GJ Maxwell=b681e71e, K Rabada=e62dd25d, UT Khawaja=331ea488, HE van der Dussen=9948e262, DA Warner=dcce6f09, MA Starc=3fb19989, AJ Finch=b8d490fd, CH Morris=fb66ce1f, NM Lyon=96a6a7ad}
+South Africa
+Australia
+PJ Cummins::9::15::60.00::1::54::66
+GJ Maxwell::12::20::60.00::0::60::57
+K Rabada::0::0::0.00::3::60::56
+HE van der Dussen::95::97::97.94::0::0::0
+AT Carey::85::69::123.19::0::0::0
+T Shamsi::0::0::0.00::0::54::62
+Q de Kock::52::51::101.96::0::0::0
+DA Warner::122::117::104.27::0::0::0
+F du Plessis::100::94::106.38::0::0::0
+MP Stoinis::22::34::64.71::0::18::19
+UT Khawaja::18::14::128.57::0::0::0
+CH Morris::0::0::0.00::1::54::63
+NM Lyon::3::3::100.00::2::60::53
+JP Behrendorff::11::6::183.33::1::48::55
+D Pretorius::2::5::40.00::2::36::27
+AL Phehlukwayo::4::3::133.33::2::17::22
+AJ Finch::3::4::75.00::0::0::0
+JP Duminy::14::13::107.69::0::24::22
+MA Starc::16::11::145.45::2::54::59
+SPD Smith::7::6::116.67::0::6::5
+Imran Tahir::0::0::0.00::1::54::59
+AK Markram::34::37::91.89::0::0::0
+
+BUILD SUCCESSFUL in 1s
+13 actionable tasks: 2 executed, 11 up-to-date
+
+db schema
+create table players (id text unique, name text);
+create table player_stats (name text, runs INT, balls INT, wickets INT, balls_bowled INT, runs_given INT, fifties INT, hundreds INT, matches INT);
+create table player_stats_v1 (name text, runs INT, balls INT, wickets INT, balls_bowled INT, runs_given INT, fifties INT, hundreds INT, matches INT, outs INT, catches INT);
+select sum(runs), sum(balls), sum(wickets), sum(balls_bowled), sum(runs_given), sum(fifties), sum(hundreds), sum(matches), avg(runs) from player_stats_v1 where name= 'dcce6f09' group by name;
+select sum(runs), sum(balls), sum(wickets), sum(balls_bowled), sum(runs_given), sum(fifties), sum(hundreds), sum(matches), avg(runs) from player_stats_v1 where name= '740742ef' group by name;
+select sum(runs), sum(balls), sum(wickets), sum(balls_bowled), sum(runs_given), sum(fifties), sum(hundreds), sum(matches), round(sum(runs) / cast (sum(outs)as real),2), round(sum(runs) / cast(sum(balls) as real) * 100, 2), sum(catches), round(sum(runs_given) / cast(sum(balls_bowled)/6 as real), 2), round(sum(runs_given) / cast(sum(wickets) as real),2) from player_stats_v1 where name= '3fb19989' group by name;
+
+select name as id, sum(matches) as matches, sum(runs) as runs, sum(wickets) as wickets, sum(fifties) as fifty, sum(hundreds) as hundred, round(sum(runs) / cast (sum(outs)as real),2) as bat_avg, round(sum(runs) / cast(sum(balls) as real) * 100, 2) as bat_strike_rate, sum(catches) as catches, round(sum(runs_given) / cast(sum(balls_bowled)/6 as real), 2) as economy, round(sum(runs_given) / cast(sum(wickets) as real),2) as bowling_avg from player_stats_v1  group by name;
+
+create table player_stats_aggr_v1 as select name as ID,sum(matches) as matches, sum(runs) as runs, sum(wickets) as wickets, sum(fifties) as fifty, sum(hundreds) as hundred, round(sum(runs) / cast (sum(outs)as real),2) as bat_avg, round(sum(runs) / cast(sum(balls) as real) * 100, 2) as bat_strike_rate, sum(catches) as catches, round(sum(runs_given) / cast(sum(balls_bowled)/6 as real), 2) as economy, round(sum(runs_given) / cast(sum(wickets) as real),2) as bowling_avg from player_stats_v1  group by name;
+
+JAVA_HOME="C:\Program Files\Java\jdk-17"
+cd C:\Data\projects\cricket-extraction\app; ..\gradlew.bat --configure-on-demand -PrunClassName=org.example.app.App -s -PrunJvmArgs=-Dfile.encoding=UTF-8 -x check run
+Configuration on demand is an incubating feature.
+> Task :buildSrc:extractPluginRequests UP-TO-DATE
+> Task :buildSrc:generatePluginAdapters UP-TO-DATE
+> Task :buildSrc:compileJava UP-TO-DATE
+> Task :buildSrc:compileGroovy NO-SOURCE
+> Task :buildSrc:compileGroovyPlugins UP-TO-DATE
+> Task :buildSrc:pluginDescriptors UP-TO-DATE
+> Task :buildSrc:processResources UP-TO-DATE
+> Task :buildSrc:classes UP-TO-DATE
+> Task :buildSrc:jar UP-TO-DATE
+
+> Task :app:compileJava
+Note: C:\Data\projects\cricket-extraction\app\src\main\java\org\example\app\App.java uses unchecked or unsafe operations.
+Note: Recompile with -Xlint:unchecked for details.
+
+> Task :app:processResources NO-SOURCE
+> Task :app:classes
+
+> Task :app:run
+SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
+SLF4J: Defaulting to no-operation (NOP) logger implementation
+SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
+{HM Nicholls=03521fd3, EJG Morgan=d2a6c0e6, M Erasmus=15d3c895, AU Rashid=249d60c9, MA Wood=8d92a2c3, TG Southee=13c35c9e, HDPK Dharmasena=323e4c16, MJ Santner=e4a0deae, RS Madugalle=766b5798, LH Ferguson=2f9d0389, BA Stokes=e087956b, RJ Tucker=38810cfc, JDS Neesham=9219eff0, JM Vince=a15618fe, KS Williamson=d027ba9f, Aleem Dar=f02778d1, CR Woakes=4c5d73db, TWM Latham=e824e6ee, JE Root=a343262c, LE Plunkett=9a963804, MJ Guptill=2be41edb, JC Archer=5574750c, LRPL Taylor=b61a3e1a, TA Boult=a818c1be, JJ Roy=d1c36f5c, JC Buttler=99b75528, JM Bairstow=abb83e27, MJ Henry=e84ac20c, C de Grandhomme=94d7f855}
+New Zealand
+England
+England
+New Zealand
+AU Rashid::0::0::0.00::0::48::39::4.88::0::0
+BA Stokes::92::101::91.09::0::18::20::6.67::1::0
+TA Boult::1::2::50.00::0::66::82::7.45::0::0
+C de Grandhomme::16::28::57.14::1::60::25::2.50::0::0
+TG Southee::0::0::0.00::0::0::0::0.00::0::0
+MA Wood::0::0::0.00::1::60::49::4.90::0::0
+JJ Roy::17::20::85.00::0::0::0::0.00::0::0
+JDS Neesham::32::30::106.67::3::42::43::6.14::0::0
+CR Woakes::2::4::50.00::3::54::37::4.11::0::0
+LH Ferguson::0::0::0.00::3::60::50::5.00::0::0
+JM Vince::0::0::0.00::0::0::0::0.00::0::0
+JM Bairstow::36::55::65.45::0::0::0::0.00::0::0
+JE Root::7::30::23.33::0::0::0::0.00::0::0
+LRPL Taylor::15::31::48.39::0::0::0::0.00::0::0
+MJ Henry::4::2::200.00::1::60::40::4.00::0::0
+MJ Santner::5::8::62.50::0::18::11::3.67::0::0
+TWM Latham::47::56::83.93::0::0::0::0.00::0::0
+JC Archer::0::1::0.00::1::66::57::5.18::0::0
+EJG Morgan::9::22::40.91::0::0::0::0.00::0::0
+KS Williamson::30::53::56.60::0::0::0::0.00::0::0
+LE Plunkett::10::10::100.00::3::60::42::4.20::0::0
+MJ Guptill::20::19::105.26::0::0::0::0.00::0::0
+JC Buttler::66::63::104.76::0::0::0::0.00::1::0
+HM Nicholls::55::77::71.43::0::0::0::0.00::1::0
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+For more on this, please refer to https://docs.gradle.org/8.10/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+
+BUILD SUCCESSFUL in 1s
+9 actionable tasks: 2 executed, 7 up-to-date
