@@ -12,6 +12,7 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -45,7 +46,7 @@ public class App {
     // static final String PLAYERS_SQL = "MERGE INTO players WHEN MATCHED THEN UPDATE SET id = ? WHERE name = ? WHEN NOT MATCHED THEN INSERT INTO players (id , name) VALUES(?,?)";
     static final String PLAYERS_SQL = "INSERT INTO players (id, name) VALUES (?,?) ON CONFLICT(id) DO UPDATE SET name = excluded.name";
     static final String PLAYERS_STATS_SQL = "INSERT INTO player_stats_v1 (name, runs, balls, wickets, balls_bowled, runs_given, fifties, hundreds, matches, outs, catches) values (?,?,?,?,?,?,?,?,?,?,?)";
-    static final String GET_PLAYER_INFO = "SELECT * FROM player_stats_aggr_v1 WHERE ID= '740742ef'";
+    static final String GET_PLAYER_INFO = "SELECT * FROM player_stats_aggr_v1 WHERE ID in (?,?)";
     static FilenameFilter filter = (dir, name) -> name.startsWith("1384") || name.startsWith("1144");
 
     public static void main(String[] args) throws IOException, Exception {
@@ -290,7 +291,8 @@ public class App {
 
     static class DataBase {
 
-        static Connection getConnection() {
+        static Connection 
+        getConnection() {
             try {
                 String url = "jdbc:sqlite:C:/Users/dhana/cricket.db";
                 return DriverManager.getConnection(url);
@@ -304,20 +306,29 @@ public class App {
     @CrossOrigin(origins = "*")
     @GetMapping("/v1/get-player")
     public Object getRandomPlayerInfo() {
-       
+        ResultSet rs = null;
+        ArrayList<PlayerInfo> players = new ArrayList<>();
 
-        try( Connection conn = DataBase.getConnection();
-            var pstmt = conn.createStatement();
-            var rs = pstmt.executeQuery(GET_PLAYER_INFO)){
-            
-            while(rs.next()){
-               PlayerInfo p =new PlayerInfo(rs.getString(1),rs.getInt(2),rs.getInt(3),rs.getInt(4),rs.getInt(5),rs.getInt(6),
-                rs.getFloat(7),rs.getFloat(8),rs.getInt(9),rs.getFloat(10),rs.getFloat(11));
-                return p;
+        try (Connection conn = DataBase.getConnection(); var pstmt = conn.prepareStatement(GET_PLAYER_INFO);) {
+            pstmt.setString(1, "740742ef");
+            pstmt.setString(2, "dcce6f09");
+            rs = pstmt.executeQuery();
+            while (rs.next()) {
+                PlayerInfo p = new PlayerInfo(rs.getString(1), rs.getInt(2), rs.getInt(3), rs.getInt(4), rs.getInt(5), rs.getInt(6),
+                        rs.getFloat(7), rs.getFloat(8), rs.getInt(9), rs.getFloat(10), rs.getFloat(11));
+                players.add(p);
             }
-        } catch(Exception e){
-
+            return players;
+        } catch (Exception e) {
+            System.out.println("exception occured" + e.getMessage());
+        } finally {
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException ex) {
+                }
+            }
         }
-    return null;
+        return null;
     }
 }

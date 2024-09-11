@@ -1,30 +1,147 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>My First HTML Page</title>
+    <title>Cricket Cards</title>
     <link rel="stylesheet" href="styles.css">
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 </head>
+
 <body>
-    <h1>Hello, World!</h1>
-    <p>This is a paragraph.</p>
-    <div id="result"></div>
+    <div class="cards">
+        <div class="card">
+            <img src="player.jpg" alt="Player Image" class="player-img">
+            <h2 class="player-name" id="id1"></h2>
+            <p class="player-info" id="matches1"></p>
+            <p class="player-info" id="runs1"></p>
+            <p class="player-info" id="avg1"></p>
+            <p class="player-info" id="sr1"></p>
+            <p class="player-info" id="fifty1"></p>
+            <p class="player-info" id="hundred1"></p>
+            <p class="player-info" id="wickets1"></p>
+            <p class="player-info" id="economy1"></p>
+            <p class="player-info" id="bAvg1"></p>
+        </div>
+        <div class="card">
+            <img src="player.jpg" alt="Player Image" class="player-img">
+            <h2 class="player-name" id="id2">Player Name</h2>
+            <p class="player-info" id="matches2">Team: XYZ</p>
+            <p class="player-info" id="runs2">Matches: 100</p>
+            <p class="player-info" id="avg2">Runs: 5000</p>
+            <p class="player-info" id="sr2">Wickets: 150</p>
+            <p class="player-info" id="fifty2">Wickets: 150</p>
+            <p class="player-info" id="hundred2">Wickets: 150</p>
+            <p class="player-info" id="wickets2">Wickets: 150</p>
+            <p class="player-info" id="economy2">Wickets: 150</p>
+            <p class="player-info" id="bAvg2">Wickets: 150</p>
+        </div>
+    </div>
+
     <script>
-        $(document).ready(function() {
+
+        function getclickableElem(dataElem) {
+            return '<button class="clickable-element" data-matches="one">' + dataElem + '</button>';
+        }
+        $(document).ready(function () {
             $.ajax({
                 url: 'http://localhost:8080/v1/get-player', // Replace with your API endpoint
                 method: 'GET',
-                success: function(data) {
-                    $('#result').html(JSON.stringify(data));
+                success: function (data) {
+                    // $('#result').html(JSON.stringify(data));
+                    $('#id1').html(data[0].id);
+                    $('#matches1').html('Matches: ' + getclickableElem(data[0].matches));
+                    $('#runs1').html('Runs: ' + getclickableElem(data[0].runs));
+                    $('#avg1').html('Average: ' + getclickableElem(data[0].avg));
+                    $('#sr1').html('Strike Rate: ' + getclickableElem(data[0].strikeRate));
+                    $('#fifty1').html('Fifties: ' + getclickableElem(data[0].fifities));
+                    $('#hundred1').html('Hundreds: ' + getclickableElem(data[0].hundreds));
+                    $('#wickets1').html('Wickets: ' + getclickableElem(data[0].wickets));
+                    $('#economy1').html('Economy: ' + getclickableElem(data[0].economy));
+                    $('#bAvg1').html('Bowling Avg: ' + getclickableElem(data[0].bAvg));
+
+                    $('#id2').html(data[1].id);
+                    $('#matches2').html('Matches: ' + data[1].matches);
+                    $('#runs2').html('Runs: ' + data[1].runs);
+                    $('#avg2').html('Average: ' + data[1].avg);
+                    $('#sr2').html('Strike Rate: ' + data[1].strikeRate);
+                    $('#fifty2').html('Fifties: ' + data[1].fifities);
+                    $('#hundred2').html('Hundreds: ' + data[1].hundreds);
+                    $('#wickets2').html('Wickets: ' + data[1].wickets);
+                    $('#economy2').html('Economy: ' + data[1].economy);
+                    $('#bAvg2').html('Bowling Avg: ' + data[1].bAvg);
+                    console.log(data);
                 },
-                error: function(error) {
-                    $('#result').html('Error: ' + error.statusText);
+                error: function (error) {
+                    $('#result').html('Error: ' + error.statushtml);
                 }
             });
         });
     </script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+
+        /* .card {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            html-align: center;
+            width: 300px;
+        } */
+
+        .cards {
+            display: flex;
+            gap: 20px;
+        }
+
+        .card {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            html-align: center;
+            width: 200px;
+        }
+
+        .player-img {
+            border-radius: 50%;
+            width: 100px;
+            height: 100px;
+        }
+
+        .player-name {
+            font-size: 24px;
+            margin: 10px 0;
+        }
+
+        .player-info {
+            font-size: 18px;
+            margin: 5px 0;
+        }
+        button {
+    padding: 10px 20px;
+    border: none;
+    background-color: #007bff;
+    color: #fff;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+    </style>
 </body>
+
 </html>
