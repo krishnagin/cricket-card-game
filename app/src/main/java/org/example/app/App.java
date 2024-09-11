@@ -47,6 +47,7 @@ public class App {
     static final String PLAYERS_SQL = "INSERT INTO players (id, name) VALUES (?,?) ON CONFLICT(id) DO UPDATE SET name = excluded.name";
     static final String PLAYERS_STATS_SQL = "INSERT INTO player_stats_v1 (name, runs, balls, wickets, balls_bowled, runs_given, fifties, hundreds, matches, outs, catches) values (?,?,?,?,?,?,?,?,?,?,?)";
     static final String GET_PLAYER_INFO = "SELECT * FROM player_stats_aggr_v1 WHERE ID in (?,?)";
+    static final String GET_PLAYER_NAME = "SELECT name from players where id in (?,?)";
     static FilenameFilter filter = (dir, name) -> name.startsWith("1384") || name.startsWith("1144");
 
     public static void main(String[] args) throws IOException, Exception {
@@ -286,7 +287,7 @@ public class App {
         }
     }
 
-    static record PlayerInfo(String id, int matches, int runs, int wickets, int fifities, int hundreds, float avg, float strikeRate, 
+    static record PlayerInfo(String name, int matches, int runs, int wickets, int fifities, int hundreds, float avg, float strikeRate, 
     int catches, float economy, float bAvg) {} ;
 
     static class DataBase {
@@ -307,14 +308,18 @@ public class App {
     @GetMapping("/v1/get-player")
     public Object getRandomPlayerInfo() {
         ResultSet rs = null;
+        ResultSet rs1 = null;
         ArrayList<PlayerInfo> players = new ArrayList<>();
 
-        try (Connection conn = DataBase.getConnection(); var pstmt = conn.prepareStatement(GET_PLAYER_INFO);) {
+        try (Connection conn = DataBase.getConnection(); var pstmt = conn.prepareStatement(GET_PLAYER_INFO); var stmt = conn.prepareStatement(GET_PLAYER_NAME)) {
             pstmt.setString(1, "740742ef");
             pstmt.setString(2, "dcce6f09");
+            stmt.setString(1, "740742ef");
+            stmt.setString(2, "dcce6f09");
             rs = pstmt.executeQuery();
-            while (rs.next()) {
-                PlayerInfo p = new PlayerInfo(rs.getString(1), rs.getInt(2), rs.getInt(3), rs.getInt(4), rs.getInt(5), rs.getInt(6),
+            rs1 = stmt.executeQuery();
+            while (rs.next() && rs1.next()) {
+                PlayerInfo p = new PlayerInfo(rs1.getString(1), rs.getInt(2), rs.getInt(3), rs.getInt(4), rs.getInt(5), rs.getInt(6),
                         rs.getFloat(7), rs.getFloat(8), rs.getInt(9), rs.getFloat(10), rs.getFloat(11));
                 players.add(p);
             }
@@ -325,6 +330,12 @@ public class App {
             if (rs != null) {
                 try {
                     rs.close();
+                } catch (SQLException ex) {
+                }
+            }
+            if (rs1 != null) {
+                try {
+                    rs1.close();
                 } catch (SQLException ex) {
                 }
             }

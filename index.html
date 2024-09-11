@@ -14,30 +14,88 @@
 <body>
     <div class="cards">
         <div class="card">
-            <img src="player.jpg" alt="Player Image" class="player-img">
-            <h2 class="player-name" id="id1"></h2>
-            <p class="player-info" id="matches1"></p>
-            <p class="player-info" id="runs1"></p>
-            <p class="player-info" id="avg1"></p>
-            <p class="player-info" id="sr1"></p>
-            <p class="player-info" id="fifty1"></p>
-            <p class="player-info" id="hundred1"></p>
-            <p class="player-info" id="wickets1"></p>
-            <p class="player-info" id="economy1"></p>
-            <p class="player-info" id="bAvg1"></p>
+            <img src="images/OIG3.jpg" alt="Player Image" class="player-img">
+            <h2 class="player-name" id="name1"></h2>
+            <table>
+                <tr>
+                    <td>Matches: </td>
+                    <td id="matches1"></td>
+                </tr>
+                <tr>
+                    <td>Runs: </td>
+                    <td id="runs1"></td>
+                </tr>
+                <tr>
+                    <td>Average: </td>
+                    <td id="avg1"></td>
+                </tr>
+                <tr>
+                    <td>Strike Rate: </td>
+                    <td id="sr1"></td>
+                </tr>
+                <tr>
+                    <td>Fifties: </td>
+                    <td id="fifty1"></td>
+                </tr>
+                <tr>
+                    <td>Hundreds: </td>
+                    <td id="hundred1"></td>
+                </tr>
+                <tr>
+                    <td>Wickets: </td>
+                    <td id="wickets1"></td>
+                </tr>
+                <tr>
+                    <td>Economy: </td>
+                    <td id="economy1"></td>
+                </tr>
+                <tr>
+                    <td>Bowling Avg: </td>
+                    <td id="bAvg1"></td>
+                </tr>
+            </table>
+            <!-- <p class="player-info" id="matches1"></p> -->
         </div>
         <div class="card">
-            <img src="player.jpg" alt="Player Image" class="player-img">
-            <h2 class="player-name" id="id2">Player Name</h2>
-            <p class="player-info" id="matches2">Team: XYZ</p>
-            <p class="player-info" id="runs2">Matches: 100</p>
-            <p class="player-info" id="avg2">Runs: 5000</p>
-            <p class="player-info" id="sr2">Wickets: 150</p>
-            <p class="player-info" id="fifty2">Wickets: 150</p>
-            <p class="player-info" id="hundred2">Wickets: 150</p>
-            <p class="player-info" id="wickets2">Wickets: 150</p>
-            <p class="player-info" id="economy2">Wickets: 150</p>
-            <p class="player-info" id="bAvg2">Wickets: 150</p>
+            <img src="images/OIG3.jpg" alt="Player Image" class="player-img">
+            <h2 class="player-name" id="name2"></h2>
+            <table>
+                <tr>
+                    <td>Matches: </td>
+                    <td id="matches2"></td>
+                </tr>
+                <tr>
+                    <td>Runs: </td>
+                    <td id="runs2"></td>
+                </tr>
+                <tr>
+                    <td>Average: </td>
+                    <td id="avg2"></td>
+                </tr>
+                <tr>
+                    <td>Strike Rate: </td>
+                    <td id="sr2"></td>
+                </tr>
+                <tr>
+                    <td>Fifties: </td>
+                    <td id="fifty2"></td>
+                </tr>
+                <tr>
+                    <td>Hundreds: </td>
+                    <td id="hundred2"></td>
+                </tr>
+                <tr>
+                    <td>Wickets: </td>
+                    <td id="wickets2"></td>
+                </tr>
+                <tr>
+                    <td>Economy: </td>
+                    <td id="economy2"></td>
+                </tr>
+                <tr>
+                    <td>Bowling Avg: </td>
+                    <td id="bAvg2"></td>
+                </tr>
         </div>
     </div>
 
@@ -52,28 +110,28 @@
                 method: 'GET',
                 success: function (data) {
                     // $('#result').html(JSON.stringify(data));
-                    $('#id1').html(data[0].id);
-                    $('#matches1').html('Matches: ' + getclickableElem(data[0].matches));
-                    $('#runs1').html('Runs: ' + getclickableElem(data[0].runs));
-                    $('#avg1').html('Average: ' + getclickableElem(data[0].avg));
-                    $('#sr1').html('Strike Rate: ' + getclickableElem(data[0].strikeRate));
-                    $('#fifty1').html('Fifties: ' + getclickableElem(data[0].fifities));
-                    $('#hundred1').html('Hundreds: ' + getclickableElem(data[0].hundreds));
-                    $('#wickets1').html('Wickets: ' + getclickableElem(data[0].wickets));
-                    $('#economy1').html('Economy: ' + getclickableElem(data[0].economy));
-                    $('#bAvg1').html('Bowling Avg: ' + getclickableElem(data[0].bAvg));
+                    $('#name1').text(data[0].name);
+                    $('#matches1').html(getclickableElem(data[0].matches));
+                    $('#runs1').html(getclickableElem(data[0].runs));
+                    $('#avg1').html(getclickableElem(data[0].avg));
+                    $('#sr1').html(getclickableElem(data[0].strikeRate));
+                    $('#fifty1').html(getclickableElem(data[0].fifities));
+                    $('#hundred1').html(getclickableElem(data[0].hundreds));
+                    $('#wickets1').html(getclickableElem(data[0].wickets));
+                    $('#economy1').html(getclickableElem(data[0].economy));
+                    $('#bAvg1').html(getclickableElem(data[0].bAvg));
 
-                    $('#id2').html(data[1].id);
-                    $('#matches2').html('Matches: ' + data[1].matches);
-                    $('#runs2').html('Runs: ' + data[1].runs);
-                    $('#avg2').html('Average: ' + data[1].avg);
-                    $('#sr2').html('Strike Rate: ' + data[1].strikeRate);
-                    $('#fifty2').html('Fifties: ' + data[1].fifities);
-                    $('#hundred2').html('Hundreds: ' + data[1].hundreds);
-                    $('#wickets2').html('Wickets: ' + data[1].wickets);
-                    $('#economy2').html('Economy: ' + data[1].economy);
-                    $('#bAvg2').html('Bowling Avg: ' + data[1].bAvg);
-                    console.log(data);
+                    $('#name2').text(data[1].name);
+                    $('#matches2').html(getclickableElem(data[1].matches));
+                    $('#runs2').html(getclickableElem(data[1].runs));
+                    $('#avg2').html(getclickableElem(data[1].avg));
+                    $('#sr2').html(getclickableElem(data[1].strikeRate));
+                    $('#fifty2').html(getclickableElem(data[1].fifities));
+                    $('#hundred2').html(getclickableElem(data[1].hundreds));
+                    $('#wickets2').html(getclickableElem(data[1].wickets));
+                    $('#economy2').html(getclickableElem(data[1].economy));
+                    $('#bAvg2').html(getclickableElem(data[1].bAvg));
+                    // console.log(data);
                 },
                 error: function (error) {
                     $('#result').html('Error: ' + error.statushtml);
@@ -110,8 +168,7 @@
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            html-align: center;
-            width: 200px;
+            width: 250px;
         }
 
         .player-img {
@@ -129,17 +186,27 @@
             font-size: 18px;
             margin: 5px 0;
         }
-        button {
-    padding: 10px 20px;
-    border: none;
-    background-color: #007bff;
-    color: #fff;
-    border-radius: 5px;
-    cursor: pointer;
-}
 
-button:hover {
-    background-color: #0056b3;
+        button {
+            padding: 10px 20px;
+            border: none;
+            background-color: #007bff;
+            color: #fff;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+        table {
+    width: 100%;
+    margin: 10px 0;
+    border-collapse: collapse;
+}
+td {
+    padding: 5px;
+    border-bottom: 1px solid #ddd;
 }
     </style>
 </body>
