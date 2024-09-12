@@ -131,3 +131,5 @@ For more on this, please refer to https://docs.gradle.org/8.10/userguide/command
 
 BUILD SUCCESSFUL in 1s
 9 actionable tasks: 2 executed, 7 up-to-date
+
+gradlew.bat bootRun

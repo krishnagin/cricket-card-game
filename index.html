@@ -13,7 +13,7 @@
 
 <body>
     <div class="cards">
-        <div class="card">
+        <div class="card" id="card1">
             <img src="images/OIG3.jpg" alt="Player Image" class="player-img">
             <h2 class="player-name" id="name1"></h2>
             <table>
@@ -56,7 +56,7 @@
             </table>
             <!-- <p class="player-info" id="matches1"></p> -->
         </div>
-        <div class="card">
+        <div class="card" id="card2">
             <img src="images/OIG3.jpg" alt="Player Image" class="player-img">
             <h2 class="player-name" id="name2"></h2>
             <table>
@@ -96,19 +96,129 @@
                     <td>Bowling Avg: </td>
                     <td id="bAvg2"></td>
                 </tr>
+            </table>
+        </div>
+        <div class="option">
+            <p>Select any career stats to play!</p>
+            <p id="result"></p>
         </div>
     </div>
 
     <script>
-
+        let cachedData = {};
         function getclickableElem(dataElem) {
-            return '<button class="clickable-element" data-matches="one">' + dataElem + '</button>';
+            return '<button type="button" class="clickable-element" data-matches="one">' + dataElem + '</button>';
         }
+        function getDisabledButton(dataElem) {
+            return '<button type="button" class="disabled-button" data-matches="one" disabled="true">' + dataElem + '</button>';
+        }
+        function highlight(e1, e2){
+            $(e1).addClass('highlight');
+            $(e2).addClass('highlight');
+        }
+        $(document).click(function (event) {
+            console.log('document click event captured ' + event.target.offsetParent.id);
+            
+            $('#name2').text(cachedData[1].name);
+            $('#matches2').html(getclickableElem(cachedData[1].matches));
+            $('#runs2').html(getclickableElem(cachedData[1].runs));
+            $('#avg2').html(getclickableElem(cachedData[1].avg));
+            $('#sr2').html(getclickableElem(cachedData[1].strikeRate));
+            $('#fifty2').html(getclickableElem(cachedData[1].fifities));
+            $('#hundred2').html(getclickableElem(cachedData[1].hundreds));
+            $('#wickets2').html(getclickableElem(cachedData[1].wickets));
+            $('#economy2').html(getclickableElem(cachedData[1].economy));
+            $('#bAvg2').html(getclickableElem(cachedData[1].bAvg));
+            $('button').prop('disabled', true);
+            if('matches1'.match(event.target.offsetParent.id)){
+                highlight('#matches1', '#matches2');
+                if(cachedData[0].matches > cachedData[1].matches){
+                    $('#result').text('Hurray! You won.. 🚀');
+                } else {
+                    $('#result').text('Oops! You Lose.. 😐');
+                }
+            }
+
+            if('runs1'.match(event.target.offsetParent.id)){
+                highlight('#runs1', '#runs1');
+                if(cachedData[0].runs > cachedData[1].runs){
+                    $('#result').text('Hurray! You won.. 🚀');
+                } else {
+                    $('#result').text('Oops! You Lose.. 😐');
+                }
+            }
+
+            if('avg1'.match(event.target.offsetParent.id)){
+                highlight('#avg1', '#avg2');
+                if(cachedData[0].avg > cachedData[1].avg){
+                    $('#result').text('Hurray! You won.. 🚀');
+                } else {
+                    $('#result').text('Oops! You Lose.. 😐');
+                }
+            }
+
+            if('sr1'.match(event.target.offsetParent.id)){
+                highlight('#sr1', '#sr2');
+                if(cachedData[0].strikeRate > cachedData[1].strikeRate){
+                    $('#result').text('Hurray! You won.. 🚀');
+                } else {
+                    $('#result').text('Oops! You Lose.. 😐');
+                }
+            }
+
+            if('fifty1'.match(event.target.offsetParent.id)){
+                highlight('#fifty1', '#fifty2');
+                if(cachedData[0].fifities > cachedData[1].fifities){
+                    $('#result').text('Hurray! You won.. 🚀');
+                } else {
+                    $('#result').text('Oops! You Lose.. 😐');
+                }
+            }
+
+            if('hundred1'.match(event.target.offsetParent.id)){
+                highlight('#hundred1', '#hundred2');
+                if(cachedData[0].hundreds > cachedData[1].hundreds){
+                    $('#result').text('Hurray! You won.. 🚀');
+                } else {
+                    $('#result').text('Oops! You Lose.. 😐');
+                }
+            }
+
+            if('wickets1'.match(event.target.offsetParent.id)){
+                highlight('#wickets1', '#wickets2');
+                if(cachedData[0].wickets > cachedData[1].wickets){
+                    $('#result').text('Hurray! You won.. 🚀');
+                } else {
+                    $('#result').text('Oops! You Lose.. 😐');
+                }
+            }
+
+            if('economy1'.match(event.target.offsetParent.id)){
+                highlight('#economy1', '#economy2');
+                if(cachedData[0].economy < cachedData[1].economy){
+                    $('#result').text('Hurray! You won.. 🚀');
+                } else {
+                    $('#result').text('Oops! You Lose.. 😐');
+                }
+            }
+
+            if('bAvg1'.match(event.target.offsetParent.id)){
+                highlight('#bAvg1', '#bAvg2');
+                if(cachedData[0].bAvg < cachedData[1].bAvg){
+                    $('#result').text('Hurray! You won.. 🚀');
+                } else {
+                    $('#result').text('Oops! You Lose.. 😐');
+                }
+            }
+            
+        })
         $(document).ready(function () {
+            // $("#card2").hide();
             $.ajax({
                 url: 'http://localhost:8080/v1/get-player', // Replace with your API endpoint
                 method: 'GET',
                 success: function (data) {
+                    cachedData = data;
                     // $('#result').html(JSON.stringify(data));
                     $('#name1').text(data[0].name);
                     $('#matches1').html(getclickableElem(data[0].matches));
@@ -120,17 +230,17 @@
                     $('#wickets1').html(getclickableElem(data[0].wickets));
                     $('#economy1').html(getclickableElem(data[0].economy));
                     $('#bAvg1').html(getclickableElem(data[0].bAvg));
-
-                    $('#name2').text(data[1].name);
-                    $('#matches2').html(getclickableElem(data[1].matches));
-                    $('#runs2').html(getclickableElem(data[1].runs));
-                    $('#avg2').html(getclickableElem(data[1].avg));
-                    $('#sr2').html(getclickableElem(data[1].strikeRate));
-                    $('#fifty2').html(getclickableElem(data[1].fifities));
-                    $('#hundred2').html(getclickableElem(data[1].hundreds));
-                    $('#wickets2').html(getclickableElem(data[1].wickets));
-                    $('#economy2').html(getclickableElem(data[1].economy));
-                    $('#bAvg2').html(getclickableElem(data[1].bAvg));
+                    let disbaledButton = getDisabledButton("");
+                    $('#name2').html(disbaledButton);
+                    $('#matches2').html(disbaledButton);
+                    $('#runs2').html(disbaledButton);
+                    $('#avg2').html(disbaledButton);
+                    $('#sr2').html(disbaledButton);
+                    $('#fifty2').html(disbaledButton);
+                    $('#hundred2').html(disbaledButton);
+                    $('#wickets2').html(disbaledButton);
+                    $('#economy2').html(disbaledButton);
+                    $('#bAvg2').html(disbaledButton);
                     // console.log(data);
                 },
                 error: function (error) {
@@ -196,18 +306,43 @@
             cursor: pointer;
         }
 
-        button:hover {
+        .disabled-button {
+            background-color: grey;
+            width: 50px;
+            height: 35px;
+        }
+
+        .clickable-element:hover {
             background-color: #0056b3;
         }
+
         table {
-    width: 100%;
-    margin: 10px 0;
-    border-collapse: collapse;
-}
-td {
-    padding: 5px;
-    border-bottom: 1px solid #ddd;
-}
+            width: 100%;
+            margin: 10px 0;
+            border-collapse: collapse;
+        }
+
+        td {
+            padding: 5px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .option {
+            align-items: center;
+            margin: 150px auto;
+        }
+
+        button:disabled {
+            opacity: 0.5; /* Reduce opacity to indicate disabled state */
+            cursor: not-allowed; /* Change cursor to indicate disabled state */
+            background-color: #ccc; /* Optional: Change background color */
+            color: #666; /* Optional: Change text color */
+        }
+        .highlight {
+            color: black; /* Change text color if needed */
+            background-color: grey;
+            border-radius: 5px;
+        }
     </style>
 </body>
 
