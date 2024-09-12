@@ -117,7 +117,9 @@
             $(e2).addClass('highlight');
         }
         $(document).click(function (event) {
-            console.log('document click event captured ' + event.target.offsetParent.id);
+
+            if(event.target.offsetParent){
+                console.log('document click event captured ' + event.target.offsetParent.id);
             
             $('#name2').text(cachedData[1].name);
             $('#matches2').html(getclickableElem(cachedData[1].matches));
@@ -210,6 +212,8 @@
                     $('#result').text('Oops! You Lose.. 😐');
                 }
             }
+            }
+            
             
         })
         $(document).ready(function () {
