@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Cricket Cards</title>
-    <link rel="stylesheet" href="styles.css">
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"
         integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 </head>
@@ -118,7 +117,7 @@
         }
         $(document).click(function (event) {
 
-            if(event.target.offsetParent){
+            if('BUTTON'.match(event.target.tagName) && event.target.offsetParent){
                 console.log('document click event captured ' + event.target.offsetParent.id);
             
             $('#name2').text(cachedData[1].name);
@@ -197,7 +196,7 @@
 
             if('economy1'.match(event.target.offsetParent.id)){
                 highlight('#economy1', '#economy2');
-                if(cachedData[0].economy < cachedData[1].economy){
+                if(cachedData[1].economy == 0 || cachedData[0].economy < cachedData[1].economy){
                     $('#result').text('Hurray! You won.. 🚀');
                 } else {
                     $('#result').text('Oops! You Lose.. 😐');
@@ -206,7 +205,7 @@
 
             if('bAvg1'.match(event.target.offsetParent.id)){
                 highlight('#bAvg1', '#bAvg2');
-                if(cachedData[0].bAvg < cachedData[1].bAvg){
+                if(cachedData[1].bAvg ==0 || cachedData[0].bAvg < cachedData[1].bAvg){
                     $('#result').text('Hurray! You won.. 🚀');
                 } else {
                     $('#result').text('Oops! You Lose.. 😐');
