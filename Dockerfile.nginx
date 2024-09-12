@@ -6,6 +6,8 @@ COPY index.html /usr/share/nginx/html/index.html
 
 COPY images /usr/share/nginx/html/images
 
+COPY nginx.conf /usr/share/nginx/nginx.conf
+
 # Expose port 80
 EXPOSE 80
 
