@@ -47,20 +47,22 @@ public class App {
     static final String PLAYERS_SQL = "INSERT INTO players (id, name) VALUES (?,?) ON CONFLICT(id) DO UPDATE SET name = excluded.name";
     static final String PLAYERS_STATS_SQL = "INSERT INTO player_stats_v1 (name, runs, balls, wickets, balls_bowled, runs_given, fifties, hundreds, matches, outs, catches) values (?,?,?,?,?,?,?,?,?,?,?)";
     static final String GET_PLAYER_INFO = "SELECT * FROM player_stats_aggr_v1 WHERE ID in (?,?)";
-    static final String GET_PLAYER_NAME = "SELECT name from players where id in (?,?)";
-    static FilenameFilter filter = (dir, name) -> name.startsWith("1384") || name.startsWith("1144");
+    static final String GET_PLAYER_NAME = "SELECT * from players ORDER BY RANDOM() LIMIT 2";
+    static FilenameFilter filter = (dir, name) -> name.startsWith("1144");
 
     public static void main(String[] args) throws IOException, Exception {
 
-        File[] file = directory.listFiles(filter);
-        System.out.println(file.length);
-
-        SpringApplication.run(App.class, args);
+        // File[] file = directory.listFiles(filter);
+        // System.out.println(file.length);
 
         // for(int i = 0; i < file.length; i++) {
         //     System.out.println("file name: " + file[i].getName());
         //     extract_load(file[i]);
         // }
+
+        SpringApplication.run(App.class, args);
+
+        
     }
 
     static void extract_load(File file) throws Exception {
@@ -295,7 +297,8 @@ public class App {
         static Connection 
         getConnection() {
             try {
-                String url = "jdbc:sqlite:C:/Users/dhana/cricket.db";
+                // String url = "jdbc:sqlite:C:\\Data\\projects\\cricket-extraction\\db\\cricket.db";
+                String url = "jdbc:sqlite:cricket.db";
                 return DriverManager.getConnection(url);
             } catch (SQLException ex) {
                 System.out.println("exception in getting sqlite connection" + ex.getMessage());
@@ -308,22 +311,34 @@ public class App {
     @GetMapping("/v1/get-player")
     public Object getRandomPlayerInfo() {
         ResultSet rs = null;
-        ResultSet rs1 = null;
         ArrayList<PlayerInfo> players = new ArrayList<>();
+        // String p1 = "740742ef";
+        // String p2 = "462411b3";
+        Map<String, String> randomPlayers = new HashMap<>();
+        ArrayList<String> randomPlayersList = new ArrayList<>();
 
-        try (Connection conn = DataBase.getConnection(); var pstmt = conn.prepareStatement(GET_PLAYER_INFO); var stmt = conn.prepareStatement(GET_PLAYER_NAME)) {
-            pstmt.setString(1, "740742ef");
-            pstmt.setString(2, "dcce6f09");
-            stmt.setString(1, "740742ef");
-            stmt.setString(2, "dcce6f09");
+        try(Connection c = DataBase.getConnection(); var stmt = c.prepareStatement(GET_PLAYER_NAME); var rs1 = stmt.executeQuery();){
+            while(rs1.next()) {
+                randomPlayers.put(rs1.getString(1),rs1.getString(2));
+                randomPlayersList.add(rs1.getString(1));
+                System.out.println(randomPlayers);
+            }
+        }  catch (Exception e) {
+            System.out.println("exception occured" + e.getMessage());
+        } 
+
+        try (Connection conn = DataBase.getConnection(); var pstmt = conn.prepareStatement(GET_PLAYER_INFO);) {
+            System.out.println(randomPlayersList.get(0));
+            System.out.println(randomPlayersList.get(1));
+            pstmt.setString(1, randomPlayersList.get(0));
+            pstmt.setString(2, randomPlayersList.get(1));
             rs = pstmt.executeQuery();
-            rs1 = stmt.executeQuery();
-            while (rs.next() && rs1.next()) {
-                PlayerInfo p = new PlayerInfo(rs1.getString(1), rs.getInt(2), rs.getInt(3), rs.getInt(4), rs.getInt(5), rs.getInt(6),
+            while (rs.next()) {
+                PlayerInfo p = new PlayerInfo(randomPlayers.get(rs.getString(1)), rs.getInt(2), rs.getInt(3), rs.getInt(4), rs.getInt(5), rs.getInt(6),
                         rs.getFloat(7), rs.getFloat(8), rs.getInt(9), rs.getFloat(10), rs.getFloat(11));
+                System.out.println(p);
                 players.add(p);
             }
-            return players;
         } catch (Exception e) {
             System.out.println("exception occured" + e.getMessage());
         } finally {
@@ -333,13 +348,7 @@ public class App {
                 } catch (SQLException ex) {
                 }
             }
-            if (rs1 != null) {
-                try {
-                    rs1.close();
-                } catch (SQLException ex) {
-                }
-            }
         }
-        return null;
+        return players;
     }
 }
