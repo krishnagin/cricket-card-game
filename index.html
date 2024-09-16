@@ -205,7 +205,7 @@
 
             if('bAvg1'.match(event.target.offsetParent.id)){
                 highlight('#bAvg1', '#bAvg2');
-                if(cachedData[1].bAvg ==0 || cachedData[0].bAvg < cachedData[1].bAvg){
+                if(cachedData[1].bAvg ==0 || (cachedData[0].bAvg != 0 && cachedData[0].bAvg < cachedData[1].bAvg)){
                     $('#result').text('Hurray! You won.. 🚀');
                 } else {
                     $('#result').text('Oops! You Lose.. 😐');
