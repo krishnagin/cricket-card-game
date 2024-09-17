@@ -218,7 +218,7 @@
         $(document).ready(function () {
             // $("#card2").hide();
             $.ajax({
-                url: 'http://localhost:8080/v1/get-player', // Replace with your API endpoint
+                url: 'https://cricket-card-spring-service.azurewebsites.net/v1/get-player', // Replace with your API endpoint
                 method: 'GET',
                 success: function (data) {
                     cachedData = data;
