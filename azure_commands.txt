@@ -1,0 +1,11 @@
+az login
+
+az acr login --name CricketGameRegistry
+
+docker tag cricket-extraction-nginx:latest cricketgameregistry.acr.io/cricket-extraction-nginx:latest
+
+docker push cricketgameregistry.acr.io/cricket-extraction-nginx:latest
+
+Apache Benchmark Test:
+
+ab -n 1000 -c 100 -g multi_thread_10 -e m_thread_10 http://localhost:8000/content/65236.json
